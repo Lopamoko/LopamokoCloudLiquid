@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,7 +45,10 @@ public class HelloController {
     }
     @RequestMapping(value = "/addComments")
     @ResponseBody
-    public List addComment(@RequestHeader(name = "id")HashMap<String,String> map){
+    public List addComment(@RequestHeader(name = "id")HashMap<String,String> map) throws UnsupportedEncodingException {
+        System.out.println(map.get("message"));
+        String newString = new String(map.get("message").getBytes("ISO-8859-1"), "UTF-8");
+        System.out.println(newString);
         return new ProductManager().addComment(Long.parseLong(map.get("product_id")),map.get("message"),Long.parseLong(map.get("customer_id")));
     }
     @RequestMapping(value = "/getComments")
