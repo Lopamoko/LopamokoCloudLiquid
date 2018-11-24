@@ -157,7 +157,7 @@ public class HelloController {
     @RequestMapping("/addToOrder")
     @ResponseBody
     public Order addToOrder(@RequestHeader(name = "id")HashMap<String,String> map){
-        return new OrderManager().addToOrder(Integer.parseInt(map.get("shop_product_id")),Long.parseLong(map.get("order_id")));
+        return new OrderManager().addToOrder(Long.parseLong(map.get("shop_product_id")),Long.parseLong(map.get("order_id")));
     }
     @RequestMapping("/removeFromOrder")
     @ResponseBody

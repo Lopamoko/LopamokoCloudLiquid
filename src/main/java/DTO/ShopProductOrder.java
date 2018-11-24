@@ -14,7 +14,6 @@ import javax.persistence.Table;
 @ToString
 @Getter
 @Setter
-@Table(name = "shop_product_order", schema = "public", catalog = "postgres")
 public class ShopProductOrder {
     private long shop_product_order_id;
     private long order_id;

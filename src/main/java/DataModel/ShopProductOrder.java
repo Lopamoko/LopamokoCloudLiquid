@@ -10,7 +10,7 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Getter
 @Setter
-@Table(name = "shop_product_order", schema = "public", catalog = "postgres")
+@Table(name = "shop_product_order", schema = "public")
 public class ShopProductOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

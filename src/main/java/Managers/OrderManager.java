@@ -50,11 +50,12 @@ public class OrderManager {
         return new ModelMapper().map(order, DTO.Order.class);
     }
 
-    public DTO.Order addToOrder(int shop_product_id, long order_id){
+    public DTO.Order addToOrder(long shop_product_id, long order_id){
        Session session = HibernateUtil.getSessionFactory().openSession();
        ShopProductOrder shopProductOrder = new ShopProductOrder();
        shopProductOrder.setOrder_id(order_id);
        shopProductOrder.setShop_product_id(shop_product_id);
+
        session.beginTransaction();
        session.save(shopProductOrder);
        session.getTransaction().commit();
