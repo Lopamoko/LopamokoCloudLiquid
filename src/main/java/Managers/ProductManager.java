@@ -90,14 +90,19 @@ public class ProductManager {
 
     public List getAllProduct(){
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List products = session.createQuery("from DataModel.Product").list();
-        session.close();
-        ArrayList<Product> productDto = new ArrayList();
-        ModelMapper modelMapper = new ModelMapper();
-        for (int i = 0; i < products.size(); i++){
-            productDto.add(modelMapper.map(products.get(i), Product.class));
+        try {
+            List products = session.createQuery("from DataModel.Product").list();
+            session.close();
+            ArrayList<Product> productDto = new ArrayList();
+            ModelMapper modelMapper = new ModelMapper();
+            for (int i = 0; i < products.size(); i++) {
+                productDto.add(modelMapper.map(products.get(i), Product.class));
+            }
+            return productDto;
+        }catch (Exception e){
+            session.close();
+            return null;
         }
-        return productDto;
     }
 
     public List getCategories(){
