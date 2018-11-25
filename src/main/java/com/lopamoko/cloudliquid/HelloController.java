@@ -70,9 +70,6 @@ public class HelloController {
     @RequestMapping(value = "/getCurrentOrder")
     @ResponseBody
     public DTO.Order getCurrentOrder(@RequestHeader(name = "id") HashMap<String,String> map){
-        if (map.get("customer_id") == null){
-            map.put("customer_id","1");
-        }
         return new OrderManager().getCurrentOrderByCustomerId(Long.parseLong(map.get("customer_id")));
     }
 
@@ -110,11 +107,7 @@ public class HelloController {
     @RequestMapping("/getAllOrderByCustomerId")
     @ResponseBody
     public List getAllOrderByCustomerId(@RequestHeader(name = "id")HashMap<String,String> map) {
-        if (map.get("id") != null) {
             return new OrderManager().getAllOrderByCustomerId(Long.parseLong(map.get("id")));
-        } else {
-            return new OrderManager().getAllOrderByCustomerId(1);
-        }
     }
 
     @RequestMapping("/getAllProduct")
