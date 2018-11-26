@@ -78,6 +78,7 @@ public class CustomerManager {
             DataModel.Customer customer = session.createQuery("from Customer where customer_login = '"+customer_login+"' " +
                     "and customer_password = '"+customer_password+"' " +
                     "and customer_uuid = '"+customer_uuid+"'", DataModel.Customer.class).setMaxResults(1).getSingleResult();
+            session.close();
             DTO.ShopWithProduct.Customer.Customer customerDto = new ModelMapper().map(customer, DTO.ShopWithProduct.Customer.Customer.class);
             return customerDto;
         }catch (NoResultException e){
