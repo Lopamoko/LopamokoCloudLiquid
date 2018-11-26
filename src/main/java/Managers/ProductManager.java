@@ -19,9 +19,9 @@ public class ProductManager {
 
     public DTO.ShopWithProduct.Rating addRating(long product_id, String type, long customer_id){
         Session session = HibernateUtil.getSessionFactory().openSession();
-        DataModel.Product product = session.createQuery("from Product where product_id = "+product_id+"", DataModel.Product.class).getSingleResult();
-        Customer customer = session.createQuery("from Customer where customer_id = "+customer_id+"", Customer.class).getSingleResult();
-        try {
+            DataModel.Product product = session.createQuery("from Product where product_id = "+product_id+"", DataModel.Product.class).getSingleResult();
+            Customer customer = session.createQuery("from Customer where customer_id = "+customer_id+"", Customer.class).getSingleResult();
+            try {
             Rating rating = session.createQuery("from Rating where customer_rating.customer_id = " + customer_id + " and product_rating.product_id = " + product_id + "", Rating.class).getSingleResult();
             session.beginTransaction();
             rating.setRating_type(type);
@@ -29,7 +29,7 @@ public class ProductManager {
             session.getTransaction().commit();
             session.close();
             return new ModelMapper().map(rating, DTO.ShopWithProduct.Rating.class);
-        }catch (NoResultException e) {
+        }catch (Exception e) {
             session.beginTransaction();
             Rating rating = new Rating();
             rating.setRating_datetime(new Timestamp(System.currentTimeMillis()));
@@ -44,6 +44,7 @@ public class ProductManager {
     }
     public List addComment(long product_id,String message,long customer_id){
         Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
         DataModel.Product product = session.createQuery("from Product where product_id = "+product_id+"", DataModel.Product.class).getSingleResult();
         Customer customer = session.createQuery("from Customer where customer_id = "+customer_id+"", Customer.class).getSingleResult();
 
@@ -64,9 +65,15 @@ public class ProductManager {
             commenters.add(modelMapper.map(comments.get(i), Comment.class));
         }
         return commenters;
+
+        }catch (Exception e){
+            session.close();
+            return null;
+        }
     }
     public List getComment(long product_id){
         Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
         List comment = session.createQuery("from Comment where product_comment.id = "+product_id+"").list();
         session.close();
         ArrayList<Comment> comments = new ArrayList<>();
@@ -75,9 +82,15 @@ public class ProductManager {
             comments.add(modelMapper.map(comment.get(i), Comment.class));
         }
         return comments;
+
+        }catch (Exception e){
+            session.close();
+            return null;
+        }
     }
     public List getTopProduct(){
         Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
         List products = session.createQuery("from DataModel.Product").setMaxResults(10).list();
         session.close();
         ArrayList<Product> productDto = new ArrayList();
@@ -86,6 +99,11 @@ public class ProductManager {
             productDto.add(modelMapper.map(products.get(i), Product.class));
         }
         return productDto;
+
+        }catch (Exception e){
+            session.close();
+            return null;
+        }
     }
 
     public List getAllProduct(){
@@ -107,16 +125,28 @@ public class ProductManager {
 
     public List getCategories(){
         Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
         List categories = session.createQuery("from Category ").list();
         session.close();
         return categories;
+
+        }catch (Exception e){
+            session.close();
+            return null;
+        }
     }
 
     public DTO.ProductInShop.Product getProductById(long id){
         Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
         DataModel.Product product = session.createQuery("from Product where product_id = " + id , DataModel.Product.class).getSingleResult();
         session.close();
         return new ModelMapper().map(product, DTO.ProductInShop.Product.class);
+
+        }catch (Exception e){
+            session.close();
+            return null;
+        }
     }
 
 }

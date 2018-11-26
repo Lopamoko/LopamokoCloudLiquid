@@ -19,6 +19,7 @@ public class ShopManager {
 
     public List getComment(long shop_id){
         Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
         List comment = session.createQuery("from Comment where shop_comment.id = "+shop_id+"").list();
         session.close();
         ArrayList<Comment> comments = new ArrayList<>();
@@ -27,6 +28,11 @@ public class ShopManager {
             comments.add(modelMapper.map(comment.get(i), Comment.class));
         }
         return comments;
+
+        }catch (Exception e){
+            session.close();
+            return null;
+        }
     }
 
 
@@ -42,7 +48,7 @@ public class ShopManager {
             session.getTransaction().commit();
             session.close();
             return new ModelMapper().map(rating, DTO.ShopWithProduct.Rating.class);
-        }catch (NoResultException e) {
+        }catch (Exception e) {
             session.beginTransaction();
             Rating rating = new Rating();
             rating.setRating_datetime(new Timestamp(System.currentTimeMillis()));
@@ -57,6 +63,7 @@ public class ShopManager {
     }
     public List addComment(long shop_id,String message,long customer_id){
         Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
         DataModel.Shop shop = session.createQuery("from Shop where shop_id = "+shop_id+"", DataModel.Shop.class).getSingleResult();
         Customer customer = session.createQuery("from Customer where customer_id = "+customer_id+"", Customer.class).getSingleResult();
 
@@ -77,10 +84,15 @@ public class ShopManager {
             commenters.add(modelMapper.map(comments.get(i), Comment.class));
         }
         return commenters;
+        }catch (Exception e){
+            session.close();
+            return null;
+        }
     }
 
     public List getAllShop(){
         Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
         List<Shop> shops = session.createQuery("from DataModel.Shop").list();
         List<DTO.ShopWithProduct.Shop> shopWithProduct = new ArrayList<>();
         ModelMapper mapper = new ModelMapper();
@@ -89,11 +101,22 @@ public class ShopManager {
         }
         session.close();
         return shopWithProduct;
+
+        }catch (Exception e){
+            session.close();
+            return null;
+        }
     }
     public DTO.ShopWithProduct.Shop getShopById(String id){
         Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
         Shop shop = session.createQuery("from Shop where shop_id = "+ id, Shop.class).getSingleResult();
         session.close();
         return new ModelMapper().map(shop, DTO.ShopWithProduct.Shop.class);
+
+        }catch (Exception e){
+            session.close();
+            return null;
+        }
     }
 }

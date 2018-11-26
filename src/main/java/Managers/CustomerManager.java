@@ -42,13 +42,14 @@ public class CustomerManager {
 
     public DTO.CustomerInfo.Customer getCustomerInfo(String uuid){
         Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
         DataModel.Customer customer = session.createQuery("from Customer where customer_uuid = '"+uuid+"'", DataModel.Customer.class).setMaxResults(1).getSingleResult();
         session.close();
         ModelMapper modelMapper = new ModelMapper();
-       try {
         DTO.CustomerInfo.Customer user = modelMapper.map(customer, DTO.CustomerInfo.Customer.class);
         return user;
        }catch (Exception e){
+            session.close();
            return new DTO.CustomerInfo.Customer();
        }
     }

@@ -27,13 +27,13 @@ public class Product {
     @Column(name = "product_name")
     private String product_name;
 
-    @OneToMany(mappedBy = "product_list")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product_list")
     private List<ShopProduct> shops;
 
     @OneToMany(mappedBy = "product_image")
     private List<Image> image;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "product_information",
     joinColumns = @JoinColumn(name = "product_id"),
     inverseJoinColumns = @JoinColumn(name = "information_id"))
